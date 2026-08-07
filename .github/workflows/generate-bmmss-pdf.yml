@@ -1,0 +1,28 @@
+name: Generate BMMSS PDF
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - bmmss-parking-spot-challenge.pdf.base64
+      - .github/workflows/generate-bmmss-pdf.yml
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode PDF
+        run: base64 --decode bmmss-parking-spot-challenge.pdf.base64 > bmmss-parking-spot-challenge.pdf
+      - name: Commit PDF
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bmmss-parking-spot-challenge.pdf
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Generate BMMSS PDF"
+          git push
