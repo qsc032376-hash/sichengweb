@@ -170,20 +170,35 @@
     (function () {
       // The hero can be one of three options:
       // 0 -> the original math-portrait (keeps current styling)
-      // 1 -> repository root image (IMG_3715 2.JPG)
-      // 2 -> repository root image (fe4aa53cf15f8839fc5c6cc4c348f7.JPG)
+      // 1 -> images/photo1.jpg
+      // 2 -> images/photo2.jpg
       const hero = document.getElementById('hero');
       const choice = Math.floor(Math.random() * 3);
 
-      // Use absolute raw.githubusercontent URLs so the image loads when viewing HTML on GitHub
+      // raw base (absolute) for fallback when relative fetch fails (GitHub preview sometimes blocks relative requests)
       const rawBase = 'https://raw.githubusercontent.com/qsc032376-hash/sichengweb/main/';
+
+      function makeImg(relPath, alt) {
+        const img = document.createElement('img');
+        img.className = 'hero-img';
+        img.alt = alt;
+        img.src = relPath;
+        // on error, try raw.githubusercontent (only once)
+        img.addEventListener('error', function () {
+          if (!this.dataset.didFallback) {
+            this.dataset.didFallback = '1';
+            this.src = rawBase + encodeURIComponent(relPath);
+          }
+        });
+        return img;
+      }
+
       if (choice === 0) {
-        // insert the original math-portrait markup
         hero.innerHTML = '\n          <div class="math-portrait" role="img" aria-label="Abstract mathematics illustration">\n            <span class="sigma">∑</span>\n            <span class="integral">∫</span>\n            <span class="partial">∂</span>\n            <p>Mathematics · Modeling · Simulation</p>\n          </div>\n        ';
       } else if (choice === 1) {
-        hero.innerHTML = '<img src="images/photo1.jpg" class="hero-img" alt="Person in profile looking up at curved walls lined with rows of small bottles in a brightly lit exhibit">';
+        hero.appendChild(makeImg('images/photo1.jpg', 'Person in profile looking up at curved walls lined with rows of small bottles in a brightly lit exhibit'));
       } else {
-        hero.innerHTML = '<img src="images/photo2.jpg" class="hero-img" alt="Head-and-shoulders portrait of a person in a dark suit, white shirt, and blue tie">';
+        hero.appendChild(makeImg('images/photo2.jpg', 'Head-and-shoulders portrait of a person in a dark suit, white shirt, and blue tie'));
       }
     })();
   </script>
