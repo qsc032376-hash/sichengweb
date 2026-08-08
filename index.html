@@ -170,18 +170,20 @@
     (function () {
       // The hero can be one of three options:
       // 0 -> the original math-portrait (keeps current styling)
-      // 1 -> images/photo1.jpg
-      // 2 -> images/photo2.jpg
+      // 1 -> repository root image (IMG_3715 2.JPG)
+      // 2 -> repository root image (fe4aa53cf15f8839fc5c6cc4c348f7.JPG)
       const hero = document.getElementById('hero');
       const choice = Math.floor(Math.random() * 3);
 
+      // Use absolute raw.githubusercontent URLs so the image loads when viewing HTML on GitHub
+      const rawBase = 'https://raw.githubusercontent.com/qsc032376-hash/sichengweb/main/';
       if (choice === 0) {
         // insert the original math-portrait markup
         hero.innerHTML = '\n          <div class="math-portrait" role="img" aria-label="Abstract mathematics illustration">\n            <span class="sigma">∑</span>\n            <span class="integral">∫</span>\n            <span class="partial">∂</span>\n            <p>Mathematics · Modeling · Simulation</p>\n          </div>\n        ';
       } else if (choice === 1) {
-        hero.innerHTML = '<img src="images/photo1.jpg" class="hero-img" alt="Photo 1">';
+        hero.innerHTML = '<img src="' + rawBase + encodeURIComponent('IMG_3715 2.JPG') + '" class="hero-img" alt="Person in profile looking up at curved walls lined with rows of small bottles in a brightly lit exhibit">';
       } else {
-        hero.innerHTML = '<img src="images/photo2.jpg" class="hero-img" alt="Photo 2">';
+        hero.innerHTML = '<img src="' + rawBase + 'fe4aa53cf15f8839fc5c6cc4c348f7.JPG' + '" class="hero-img" alt="Head-and-shoulders portrait of a person in a dark suit, white shirt, and blue tie">';
       }
     })();
   </script>
